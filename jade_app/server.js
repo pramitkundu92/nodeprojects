@@ -10,9 +10,12 @@ var Promise = require('bluebird');
 var http = require('http');
 var socketio = require('socket.io');
 var request = require('request');
+var utils = require(__dirname + '/custom_modules/utils.js');
 
 var app = express();
+app.use(bodyparser.json());
 var server = http.createServer(app);
+var db = utils.initDB('jadeData', ['users']);
 
 /********** using jade templating system **************/
 
@@ -49,6 +52,18 @@ jadeRouter.get('/signup',function(req,res){
 });
 
 /********** using jade templating system **************/
+
+jadeRouter.post('/adduser', function(req, res){
+	var data = {};
+	data.name = req.body.name;
+	data.password = req.body.password;
+	data.email = req.body.email;
+	data.age = req.body.age;
+	data.phone = req.body.phone;
+	utils.insertInDB('users', data).then(function(result){
+		res.json({success: true});
+	});
+});
 
 server.listen(10000);
 

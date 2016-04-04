@@ -1,20 +1,20 @@
 div.row
-	form.form-horizontal.col-md-6(method="post", name="myForm", action="")
+	form.form-horizontal.col-md-6(method="post", name="myForm", ng-submit="registerUser()")
 		div.form-group
 			label Name
-			input.form-control(type="text", name="fullname", required)
+			input.form-control(type="text", name="fullname", required, ng-model="userData.name")
 		div.form-group
 			label Password
-			input.form-control(type="password", name="password", required)				
+			input.form-control(type="password", name="password", required, ng-model="userData.password")				
 		div.form-group
 			label Email
-			input.form-control(type="email", name="email", required)				
+			input.form-control(type="email", name="email", required, ng-model="userData.email")				
 		div.form-group
 			label Age
-			input.form-control(type="number", name="age", required)				
+			input.form-control(type="number", name="age", required, ng-model="userData.age")				
 		div.form-group
 			label Phone
-			input.form-control(type="text", name="phone", required)				
+			input.form-control(type="text", name="phone", required, ng-model="userData.phone")				
 		div.form-group
 			center
 				input.btn.btn-primary(type="submit", value="Register") 		
