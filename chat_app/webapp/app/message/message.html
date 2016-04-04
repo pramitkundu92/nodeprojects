@@ -1,0 +1,41 @@
+
+<div class="container">	
+	Logged in User - {{from}}<br><hr>
+	<a ng-click="exitChat()">Close Chat</a>
+	<div ng-if="onChat" class="panel panel-default" >
+		<div class="panel-heading top-bar">
+			<span>{{user.name}}</span> &nbsp;
+			<span ng-if="userTyping"> is Typing...</span>
+			<span class="right"><i class="glyphicon glyphicon-remove" ng-click="close()"></i></span>
+		</div>
+		<div class="panel-body msg_container_base" chat-box message-list="msgList">
+			<div class="row msg-container" ng-repeat="m in msgList">
+				<div ng-class="{'msg_sent' : m.from==msg.from, 'msg_receive' : m.from!=msg.from}">
+					<span>
+						<span ng-if="m.from==msg.from">Me</span>
+						<span ng-if="m.from!=msg.from">{{user.name}}</span>
+						<span>- {{m.message}}</span>
+					</span> <!-- <button class="btn btn-warning" ng-click="deleteMessage(m._id)"></button> -->
+					&nbsp;&nbsp;&nbsp; Sent at {{m.time}}
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer">
+			<div class="input-group">
+				<textarea required id="msgbox" rows="5" cols="50" ng-model="msg.message" class="form-control" ng-keydown="keydownEvent($event)" 
+				ng-keypress = "sendMessage($event)" placeholder="Write message here"></textarea>
+				<button class="btn btn-primary" ng-click="sendMessage($event)">Send</button>
+				<button class="btn btn-info" ng-click="msg.message=''">Clear</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="sidebar show">
+		<ul class="navigation">
+          <li class="navigation-items" ng-repeat="user in userList"><a style="color : white;" ng-click="selectUserToChat(user)">{{user.name}}
+			<span ng-if="user.online">*</span>
+		  </a></li>
+        </ul>
+	</div>
+</div>	

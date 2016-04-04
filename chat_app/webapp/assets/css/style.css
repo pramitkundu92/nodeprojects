@@ -1,0 +1,77 @@
+@import url("http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css");
+/* @import url("../../vendor/bootstrap-glyphicons.css"); */
+.msg_receive
+{
+	float : left;
+	padding-left : 10px;
+	margin-left : 10px;
+	padding-bottom : 10px !important;
+	background : #fff;
+}
+.msg_sent
+{
+	float : right;
+	padding-bottom : 10px !important;
+	margin-right : 10px;
+	background : #fff;
+}
+.msg_container_base
+{
+	margin : 0;
+	padding : 0 10px 10px;
+	max-height : 300px;
+	overflow-x : hidden;
+	background : #e5e5e5;	
+}
+.msg_container
+{
+	padding : 10px;
+	display : flex;
+	overflow : hidden;
+}
+.right
+{
+	float : right;
+}
+.top-bar
+{
+	background : #666;
+	padding : 5px;
+	position : relative;
+	overflow : hidden;
+}	
+.sidebar {
+                position : absolute;
+                top : 0;
+                left : -160px;;
+                transition : 100ms left;
+            }
+            #navigation-toggle {
+                    position : absolute;
+                    left : 160px;
+                    background : rgba(3,159,244,.95);
+                    color : white;
+                    text-decoration : none;
+                    padding : 20px;
+            }
+            .show {
+                left : 0;
+            }
+            .navigation {
+                list-style : none;
+                padding : 0;
+                margin : 0;
+            }
+            .navigation-items > a {
+                display : block;
+                background-color : #444;
+                color : white;
+                line-height : 2em;
+                text-decoration : none;
+                padding : 10px 30px;
+                width : 100px;
+
+            }
+            .navigation-items  > a:hover {
+                background-color : #222;
+            }

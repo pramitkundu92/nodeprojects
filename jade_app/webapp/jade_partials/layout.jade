@@ -1,0 +1,32 @@
+doctype
+html( lang="en" )
+	head
+		title #{title}
+		meta( charset="utf-8" )
+		meta( http-equiv="X-UA-Compatible", content="IE=edge" )
+		meta( name="viewport", content="width=device-width, initial-scale=1.0" )
+		link(href="vendor/bootstrap.min.css", rel="stylesheet")
+		link(href="vendor/bootstrap-theme.min.css", rel="stylesheet")
+	body(style="padding-top:65px;", ng-app="jadeApp", ng-controller="AppCtrl")
+		header.navbar.navbar-fixed-top.navbar-inverse
+			div.container
+				a.navbar-brand(ui-sref="home") Jade Templating System
+				ul.nav.navbar-nav
+					li
+						a(ui-sref="signup") SignUp
+					li 
+						a(ui-sref="about") About Us
+		main
+			div.container
+				div(ui-view)
+		footer
+			div.container
+				hr
+				p.text-center Test app by pk7792&copy;.				
+		script(src="vendor/jquery.js")		
+		script(src="vendor/bootstrap.min.js")
+		script(src="vendor/angular.js")
+		script(src="vendor/angular-ui-router.js")
+		script(src="app/states.js")
+		script(src="app/app.js")
+		script(src="app/controllers.js")

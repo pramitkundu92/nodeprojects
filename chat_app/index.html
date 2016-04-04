@@ -1,0 +1,27 @@
+<!DOCTYPE>
+<html ng-app = "meanApp">
+	<head>
+		<title>NODER app!</title>
+		<link rel="stylesheet" href="vendor/bootstrap.min.css"/>
+		<link rel="stylesheet" href="vendor/bootstrap-theme.min.css"/>
+		<link rel="stylesheet" href="assets/css/style.css"/>
+	</head>
+	<body ng-controller="MainCtrl">
+		<div class="container">
+		<h2>{{heading}}</h2>
+		<div ui-view><a href="" ng-click="gotoState('login',undefined)">Login</a></div>
+		</div>
+		<script src="vendor/angular.js"></script>
+		<script src="vendor/jquery.js"></script>
+		<script src="vendor/bootstrap.min.js"></script>
+		<script src="vendor/angular-ui-router.js"></script>
+		<script src="vendor/socket.io.js"></script>
+		<script src="app/app.js"></script>
+		<script src="app/states.js"></script>
+		<script src="app/init.js"></script>
+		<script src="app/controllers.js"></script>
+		<script src="app/login/login.js"></script>
+		<script src="app/message/message.js"></script>
+		<script src="app/directives.js"></script>
+	</body>
+</html>
