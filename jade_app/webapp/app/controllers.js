@@ -2,7 +2,10 @@ jadeApp.controller('AppCtrl', ['$scope','userService','$state', function($scope,
 	$scope.heading = appName;
 	$scope.userData = {};
 	$scope.registerUser = function(){
-		userService.registerUser($scope.userData).then(function(result){
+		var data= new FormData();
+		//data.append('fields', $scope.userData);
+		data.append('file', $scope.userData.file);
+		userService.registerUser(data).then(function(result){
 			$state.go('home');
 		});
 	};

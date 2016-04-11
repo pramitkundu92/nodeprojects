@@ -4,17 +4,8 @@ div.row
 			label Name
 			input.form-control(type="text", name="fullname", required, ng-model="userData.name")
 		div.form-group
-			label Password
-			input.form-control(type="password", name="password", required, ng-model="userData.password")				
-		div.form-group
-			label Email
-			input.form-control(type="email", name="email", required, ng-model="userData.email")				
-		div.form-group
-			label Age
-			input.form-control(type="number", name="age", required, ng-model="userData.age")				
-		div.form-group
-			label Phone
-			input.form-control(type="text", name="phone", required, ng-model="userData.phone")				
+			label Resume
+			input(type="file", name="file", file-model="userData.file")		
 		div.form-group
 			center
-				input.btn.btn-primary(type="submit", value="Register") 		
+				input.btn.btn-primary(type="submit", value="Register")

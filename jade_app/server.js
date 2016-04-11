@@ -2,20 +2,32 @@ var express = require('express');
 var bodyparser = require('body-parser');
 var mongojs = require('mongojs');
 var events = require('events');
-//var fs = require('fs');
+var fs = require('fs');
 var path = require('path');
-var multer = require('multer');
 var mime = require('mime-types');
 var Promise = require('bluebird');
 var http = require('http');
 var socketio = require('socket.io');
 var request = require('request');
+var formidable = require('formidable');
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+	destination: __dirname + '/file_uploads',
+	filename: function(req, file, cb){
+		cb(null, file.originalname);
+	}
+});
+
+var upload = multer({storage: storage});
+
 var utils = require(__dirname + '/custom_modules/utils.js');
 
 var app = express();
 app.use(bodyparser.json());
 var server = http.createServer(app);
-var db = utils.initDB('jadeData', ['users']);
+utils.initDB('jadeData', ['users']);
+var eventEmitter = new events.EventEmitter();
 
 /********** using jade templating system **************/
 
@@ -53,17 +65,33 @@ jadeRouter.get('/signup',function(req,res){
 
 /********** using jade templating system **************/
 
-jadeRouter.post('/adduser', function(req, res){
-	var data = {};
-	data.name = req.body.name;
-	data.password = req.body.password;
-	data.email = req.body.email;
-	data.age = req.body.age;
-	data.phone = req.body.phone;
-	utils.insertInDB('users', data).then(function(result){
-		res.json({success: true});
+jadeRouter.post('/adduser', upload.single('file'), function(req, res){
+	/* var form = new formidable.IncomingForm();
+	var data= {};
+	form.uploadDir = './file_uploads';
+	form.keepExtensions = true;
+	form.on('fileBegin', function(name, file){
+		//file.path = __dirname + '/file_uploads/' + file.name;
 	});
+	form.on('field', function(field, value){
+		if(field != 'resume') 
+		{
+			data[field] = value;			
+		}
+	});
+	form.parse(req, function(err, fields){		
+		eventEmitter.emit('putindb', data);	
+		res.end();
+	}); */
+	res.json();
 });
+
+/* eventEmitter.on('putindb', function(data){
+	console.log(data);
+	utils.insertInDB('users', data).then(function(result){ 
+		console.log('*******************inserted');
+ 	}); 
+}); */
 
 server.listen(10000);
 
