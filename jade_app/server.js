@@ -2,7 +2,7 @@ var express = require('express');
 var bodyparser = require('body-parser');
 var mongojs = require('mongojs');
 var events = require('events');
-//var fs = require('fs');
+var fs = require('fs');
 var path = require('path');
 var multer = require('multer');
 var mime = require('mime-types');
@@ -10,7 +10,8 @@ var Promise = require('bluebird');
 var http = require('http');
 var socketio = require('socket.io');
 var request = require('request');
-var formidable = require('formidable');
+//var formidable = require('formidable');
+var Busboy = require('busboy');
 
 //importing custom modules
 var utils = require(__dirname + '/custom_modules/utils');
@@ -20,6 +21,7 @@ var server = http.createServer(app);
 app.use(bodyparser.json());
 utils.initDB('jadeData',['users']);
 var emitter = new events.EventEmitter();
+var db = mongojs('jadeData',['users']);
 
 /********** using jade templating system **************/
 
@@ -56,30 +58,26 @@ jadeRouter.get('/signup',function(req,res){
 });
 
 /********** using jade templating system **************/
-
+var count = 0;
 jadeRouter.post('/adduser', function(req, res){
-	var form = new formidable.IncomingForm();
 	var data = {};
-	form.uploadDir = __dirname + '/file_uploads';
-	form.keepExtensions = true;
-	form.on('field', function(name, value){
-		console.log('field method');
-		if(name != 'file')
-			data[name] = value;
+	var busboy = new Busboy({headers: req.headers});
+	busboy.on('file', function(fieldname, file, filename, encoding, mimetype){
+		var saveTo = __dirname + '/file_uploads/' + new Date().getTime().toString() + '_' + filename;
+		file.pipe(fs.createWriteStream(saveTo));
+		count = count + 1;
 	});
-	form.on('file',function(field, file){
-		console.log('file method');
+	busboy.on('field', function(fieldname, value){
+		if(fieldname != 'file')
+			data[fieldname] = value;
 	});
-	form.on('end',function(){
-		console.log('end method');
-	});
-	form.parse(req, function(err, fields, files){
-		console.log('parse method');
+	busboy.on('finish', function(){
 		utils.insertInDB('users', data)
 		.then(function(result){
 			res.json({success: true});
 		});
 	});
+	req.pipe(busboy);
 });
 
 server.listen(10000);
