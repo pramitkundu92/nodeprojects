@@ -2,10 +2,10 @@ div.row
 	form.form-horizontal.col-md-6(method="post", name="myForm", ng-submit="registerUser()")
 		div.form-group
 			label Name
-			input.form-control(type="text", name="fullname", required, ng-model="userData.name")
+			input.form-control(type="text", name="fullname", ng-model="userData.name")
 		div.form-group
-			label Resume
-			input(type="file", name="file", file-model="userData.file")		
+			label Choose File
+			input(type="file", file-model="userData.file")
 		div.form-group
 			center
-				input.btn.btn-primary(type="submit", value="Register")
+				input.btn.btn-primary(type="submit", value="Register") 		
