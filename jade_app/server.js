@@ -10,14 +10,24 @@ var Promise = require('bluebird');
 var http = require('http');
 var socketio = require('socket.io');
 var request = require('request');
-//var formidable = require('formidable');
 var Busboy = require('busboy');
+var formidable = require('formidable');
+var util = require('util');
 
 //importing custom modules
 var utils = require(__dirname + '/custom_modules/utils');
 
+var storage = multer.diskStorage({
+	destination: './file_uploads',
+	filename: function(req, file, cb){
+		cb(null, file.originalname);
+	}
+});
+var upload = multer({storage: storage}).single('file');
+
 var app = express();
 var server = http.createServer(app);
+var io = socketio(server);
 app.use(bodyparser.json());
 utils.initDB('jadeData',['users']);
 var emitter = new events.EventEmitter();
@@ -56,16 +66,20 @@ jadeRouter.get('/signup',function(req,res){
 		contextRoot : jadeContextRoot
 	});
 });
+jadeRouter.get('/upload',function(req,res){
+	res.render('upload', {
+		title : 'Using Jade Templating System',
+		contextRoot : jadeContextRoot
+	});
+});
 
 /********** using jade templating system **************/
-var count = 0;
 jadeRouter.post('/adduser', function(req, res){
 	var data = {};
 	var busboy = new Busboy({headers: req.headers});
 	busboy.on('file', function(fieldname, file, filename, encoding, mimetype){
 		var saveTo = __dirname + '/file_uploads/' + new Date().getTime().toString() + '_' + filename;
 		file.pipe(fs.createWriteStream(saveTo));
-		count = count + 1;
 	});
 	busboy.on('field', function(fieldname, value){
 		if(fieldname != 'file')
@@ -79,6 +93,46 @@ jadeRouter.post('/adduser', function(req, res){
 	});
 	req.pipe(busboy);
 });
+
+jadeRouter.post('/upload', function(req,res){
+	var form = new formidable.IncomingForm();
+	form.uploadDir = './file_uploads';
+	form.keepExtensions = true;
+	var socketId = '';	
+	form.parse(req, function(err, fields, files) {
+      res.writeHead(200, {'content-type': 'text/plain'});
+      res.write('received upload');
+	  res.end();
+    }); 
+	form.on('field', function(name, value){
+		socketId = value;
+	});
+    form.on('progress', function(bytesReceived, bytesExpected) {
+        var percent_complete = (bytesReceived / bytesExpected) * 100;
+		io.to(socketId).emit('receiveProgressInfo', percent_complete.toFixed(2));
+    }); 
+    form.on('error', function(err) {
+        console.error(err);
+    }); 
+});
+var clientsConnected = [];
+io.on('connection',function(socket){
+	clientsConnected.push({id: socket.id, socket: socket});	
+	socket.emit('socketId', socket.id);
+	socket.on('disconnect',function(){
+		removeClient(socket.id);
+	});
+});
+function removeClient(socketId){
+	var len = clientsConnected.length;
+	for(var i=0;i<len;i++){
+		if(clientsConnected[i].id == socketId){
+			clientsConnected.splice(i,1);
+			break;
+		}
+	}
+	return;
+};
 
 server.listen(10000);
 

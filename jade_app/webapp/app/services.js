@@ -16,5 +16,19 @@ jadeApp.factory('userService', ['$http', '$q', function($http,$q){
 		});
 		return def.promise;
 	};
+	factory.uploadFile = function(uploadData){
+		var deferred = $q.defer();
+		$http.post(appUrl + '/upload', uploadData, {
+			transformRequest: angular.identity,
+			headers: {'Content-Type': undefined}
+		})
+		.success(function(response){
+			deferred.resolve(response);
+		})
+		.error(function(err){
+			deferred.reject(err);
+		});
+		return deferred.promise;
+	};
 	return factory;
 }]);

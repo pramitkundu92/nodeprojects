@@ -17,5 +17,11 @@ var appStates = [
 		url: '/signup',
 		controller: 'AppCtrl',
 		templateUrl: contextRoot + '/signup'
+	},
+	{
+		name: 'upload',
+		url: '/upload',
+		controller: 'AppCtrl',
+		templateUrl: contextRoot + '/upload'
 	}
 ];

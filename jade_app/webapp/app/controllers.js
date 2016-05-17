@@ -9,4 +9,24 @@ jadeApp.controller('AppCtrl', ['$scope','userService','$state', function($scope,
 			$state.go('home');
 		});
 	};
+	$scope.progressInfo = undefined;
+	$scope.uploadFile = function(){
+		var socket = io();
+		var data= new FormData();
+		socket.on('socketId',function(id){
+			data.append('socketId', id);
+			data.append('file', $scope.uploadData.file);
+			userService.uploadFile(data)
+			.then(function(result){
+				console.log(result);
+			},function(err){
+				console.log('failed cz of - ' + err);
+			});
+		});
+		socket.on('receiveProgressInfo',function(info){
+			$scope.$apply(function(){
+				$scope.progressInfo = info;
+			});	
+		});		
+	};
 }]);

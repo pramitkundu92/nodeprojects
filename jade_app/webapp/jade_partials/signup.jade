@@ -2,7 +2,10 @@ div.row
 	form.form-horizontal.col-md-6(method="post", name="myForm", ng-submit="registerUser()")
 		div.form-group
 			label Name
-			input.form-control(type="text", name="fullname", ng-model="userData.name")
+			input.form-control(type="text", name="fullname", ng-model="userData.name", required="true")
+		div.form-group
+			label Password
+			input.form-control(type="password", name="password", ng-model="userData.password", required="true")
 		div.form-group
 			label Choose File
 			input(type="file", file-model="userData.file")

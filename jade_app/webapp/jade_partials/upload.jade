@@ -1,0 +1,8 @@
+div.form-group
+	label Choose File to Upload
+	input(type="file", name="file", file-model="uploadData.file")
+div(ng-if="progressInfo!=undefined")
+	label Progess : &nbsp;
+	span {{progressInfo}} %
+div.form-group
+	button.btn.btn-primary(ng-click="uploadFile()" ng-disabled="uploadData==undefined") Upload
