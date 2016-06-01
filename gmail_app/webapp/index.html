@@ -1,0 +1,23 @@
+<!DOCTYPE>
+<html ng-app="testApp">
+	<head>
+		<title>Gmail app!</title>
+		<link rel="stylesheet" href="vendor/bootstrap.min.css"/>
+		<link rel="stylesheet" href="vendor/bootstrap-theme.min.css"/>
+	</head>
+	<body ng-controller="MainCtrl">
+		<div class="container">
+		<h2>{{heading}}</h2>
+		<div ui-view>
+		</div>
+		</div>
+		<script src="vendor/angular.js"></script>
+		<script src="vendor/jquery.js"></script>
+		<script src="vendor/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/oauth-io/0.5.2/oauth.js"></script>
+		 <script src="https://apis.google.com/js/client.js"></script> 
+		<script src="vendor/angular-ui-router.js"></script>
+		<script src="vendor/socket.io.js"></script>
+		<script src="app/controllers.js"></script>
+	</body>
+</html>

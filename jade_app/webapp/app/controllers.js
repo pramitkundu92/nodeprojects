@@ -18,6 +18,7 @@ jadeApp.controller('AppCtrl', ['$scope','userService','$state', function($scope,
 			data.append('file', $scope.uploadData.file);
 			userService.uploadFile(data)
 			.then(function(result){
+				$scope.progressInfo = '100.00';
 				console.log(result);
 			},function(err){
 				console.log('failed cz of - ' + err);
