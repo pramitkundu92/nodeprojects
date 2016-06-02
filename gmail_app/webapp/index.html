@@ -8,7 +8,11 @@
 	<body ng-controller="MainCtrl">
 		<div class="container">
 		<h2>{{heading}}</h2>
-		<div ui-view>
+		<div class="input-group">
+			<label>Username</label>
+			<input type="text" ng-model="username" class="form-control"/>
+		</div>
+		<button class="btn btn-primary" ng-click="login()">Secure Login with OAuth</button>
 		</div>
 		</div>
 		<script src="vendor/angular.js"></script>

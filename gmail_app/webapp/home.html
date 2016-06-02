@@ -1,2 +1,28 @@
-<h3>Logged in successfully</h3>
-<button class="btn btn-primary" ng-click="fetchAllContacts()">Fetch Contacts</div>
+<!DOCTYPE>
+<html ng-app="testApp">
+	<head>
+		<title>Gmail app!</title>
+		<link rel="stylesheet" href="vendor/bootstrap.min.css"/>
+		<link rel="stylesheet" href="vendor/bootstrap-theme.min.css"/>
+	</head>
+	<body ng-controller="MainCtrl">
+		<div class="container">
+		<h3>Logged in successfully</h3>
+		<button class="btn btn-primary" ng-click="fetchAllContacts()">Fetch Contacts</div>
+		</div>
+		<div style="border:1px solid rgba(0,0,0,0.54); width:300px; margin-left:25px;">
+			<div style="margin-left:10px;" class="input-group" ng-repeat="contact in contactList">
+				<label>{{contact.displayName}}</label>
+			</div>
+		</div>
+		</div>
+		<script src="vendor/angular.js"></script>
+		<script src="vendor/jquery.js"></script>
+		<script src="vendor/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/oauth-io/0.5.2/oauth.js"></script>
+		 <script src="https://apis.google.com/js/client.js"></script> 
+		<script src="vendor/angular-ui-router.js"></script>
+		<script src="vendor/socket.io.js"></script>
+		<script src="app/controllers.js"></script>
+	</body>
+</html>
