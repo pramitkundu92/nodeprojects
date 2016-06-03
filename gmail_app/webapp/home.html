@@ -4,17 +4,40 @@
 		<title>Gmail app!</title>
 		<link rel="stylesheet" href="vendor/bootstrap.min.css"/>
 		<link rel="stylesheet" href="vendor/bootstrap-theme.min.css"/>
+		<style>
+			.selected{
+				background-color: rgba(0,0,0,0.25);
+			}
+			.contact-box{
+				border:1px solid rgba(0,0,0,0.54); 
+				width:300px; 
+				margin-left:25px;
+			}
+			.chat-box{
+				border:1px solid rgba(0,0,0,0.54); 
+				width:500px;
+			}
+		</style>
 	</head>
 	<body ng-controller="MainCtrl">
 		<div class="container">
-		<h3>Logged in successfully</h3>
-		<button class="btn btn-primary" ng-click="fetchAllContacts()">Fetch Contacts</div>
+			<h3>Logged in successfully</h3>
+			<button class="btn btn-primary" ng-click="fetchAllContacts()">Fetch Contacts
 		</div>
-		<div style="border:1px solid rgba(0,0,0,0.54); width:300px; margin-left:25px;">
-			<div style="margin-left:10px;" class="input-group" ng-repeat="contact in contactList">
-				<label>{{contact.displayName}}</label>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-6 contact-box">
+					<div style="margin-left:10px;" class="input-group" ng-repeat="contact in contactList" ng-class="{'selected':selectedContactIndex==$index}" ng-click="selectContact($index)">
+						<label>{{contact.displayName}}</label>
+					</div>
+				</div>
+				<div id="chatWindow" class="col-xs-6 chat-box">
+					<span>{{selectedContact.displayName}}</span>
+					<g:hangout render="createhangout"
+                           invites="[{ id : {{selectedContact.contact.email['@attributes'].address}}, invite_type : 'EMAIL' }]">
+					</g:hangout>
+				</div>
 			</div>
-		</div>
 		</div>
 		<script src="vendor/angular.js"></script>
 		<script src="vendor/jquery.js"></script>
@@ -23,6 +46,6 @@
 		 <script src="https://apis.google.com/js/client.js"></script> 
 		<script src="vendor/angular-ui-router.js"></script>
 		<script src="vendor/socket.io.js"></script>
-		<script src="app/controllers.js"></script>
+		<script src="app/script.js"></script>
 	</body>
 </html>
