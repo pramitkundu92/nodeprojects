@@ -1,0 +1,28 @@
+<!doctype HTML>
+<html>
+	<head>
+	</head>
+	<body ng-app="expenseApp" ng-controller="AppCtrl">
+		<h3>Expense Add</h3>
+		<form name="expenseForm" ng-submit="addExpense()">
+			<label>Description : </label><input type="text" ng-model="expense.desc" required/><br>
+			<label>Amount : </label><input type="text" ng-model="expense.amount" required/><br>
+			<input type="submit" value="Save Expense"/>
+		</form>
+		<div>
+			<button ng-click="listAllExpenses()">Refresh</div>
+		<div>
+		<div>
+			<hr>
+			<div ng-repeat="exp in expenseList">
+				Expense Description : {{exp.expense_desc}} <br>
+				Expense Amount : {{exp.amount}}
+				<br>
+				<button ng-click="editExpense($index)">Edit</button>
+				<hr>
+			</div>
+		</div>
+		<script type="text/javascript" src="vendor/angular.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+	</body>
+<html>
