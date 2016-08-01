@@ -19,16 +19,19 @@ expenseSchema.pre('save',function(next){
 	next();
 });
 
-expenseSchema.statics.findWithQuery = function(query){
-	return new Promise(function(resolve,reject){
-		this.find(query,function(err,data){
-			if(!err)
-				resolve(data);
-			else
-				reject(err);
-		});
-	});
-};
+expenseSchema.statics.findWithQuery = Promise.method(function(query){
+	return this.find({}, function(err,data){
+		if(!err)
+			return Promise.resolve(data);
+		else
+			return Promise.reject(err);
+	})
+	.and([{
+		amount: {$ne: null}
+	},{
+		expense_desc: {$ne: null}
+	}]); 		
+});
 
 var Expense = mongoose.model('Expense', expenseSchema);
 

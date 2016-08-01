@@ -11,14 +11,14 @@ app.controller('AppCtrl',['$scope','expenses',function($scope,expenses){
 		});
 	},0);
 	$scope.selectedExpense = {};
-	$scope.addExpense = function(){
-		expenses.addExpense($scope.selectedExpense)
+	$scope.saveExpense = function(){
+		expenses.saveExpense($scope.selectedExpense)
 		.then(function(result){
 			console.log(result);
 		},function(err){
 			console.error(err);
 		});
-		$scope.expense = {};
+		$scope.selectedExpense = {};
 	};
 	$scope.listAllExpenses = function(){
 		expenses.getExpenses({})
@@ -35,9 +35,9 @@ app.controller('AppCtrl',['$scope','expenses',function($scope,expenses){
 }]);
 
 app.service('expenses',['$q','$http',function($q,$http){
-	this.addExpense = function(expense){
+	this.saveExpense = function(expense){
 		var deferred = $q.defer();
-		$http.post(appUrl + '/create', expense)
+		$http.post(appUrl + '/save', expense)
 		.success(function(result){
 			deferred.resolve(result);
 		})

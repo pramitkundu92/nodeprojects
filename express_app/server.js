@@ -19,37 +19,37 @@ app.use(contextRoot,express.static(__dirname + '/webapp'));
 app.use(contextRoot,router);
 
 /*defining rest services*/
-router.post('/create',function(req,res){
+router.post('/save',function(req,res){
 	var expense = new Expense({
-		expense_desc: req.body.desc,
+		expense_desc: req.body.expenseDesc,
 		amount: req.body.amount
 	});
-	Expense.findWithQuery({}).then(function(data){
-		console.log(data);
-	});
-	/* expense.save(function(err){
-		if(!err){
-			res.json('Expense added successfully');
-		}
-		else{
-			console.log(err);
-		}
-	}); */
+	if(req.body['_id']!=undefined){
+		console.log(req.body['_id']);
+		Expense.findWithQuery({_id: req.body['_id']})
+		.then(function(result){
+			console.log(result);
+			res.json();
+		});
+	}
+	else {
+		expense.save(function(err){
+			if(!err){
+				res.json('Expense added successfully');
+			}
+			else{
+				console.log(err);
+			}
+		});
+	}
 });
 router.post('/getexpenses',function(req,res){
-	Expense.find({},function(err,expenses){
-		if(!err){
-			res.json(expenses);
-		}
-		else{
-			console.log(err);
-		}
-	})
-	.and([{
-		amount: {$ne: null}
-	},{
-		expense_desc: {$ne: null}
-	}]);	
+	Expense.findWithQuery({})
+	.then(function(result){
+		res.json(result);
+	},function(err){	
+		console.log(err);
+	});	
 });
 
 /*starting server*/

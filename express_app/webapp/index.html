@@ -4,10 +4,11 @@
 	</head>
 	<body ng-app="expenseApp" ng-controller="AppCtrl">
 		<h3>Expense Add</h3>
-		<form name="expenseForm" ng-submit="addExpense()">
-			<label>Description : </label><input type="text" ng-model="expense.desc" required/><br>
-			<label>Amount : </label><input type="text" ng-model="expense.amount" required/><br>
-			<input type="submit" value="Save Expense"/>
+		<form name="expenseForm" ng-submit="saveExpense()">
+			<label>Description : </label><input type="text" ng-model="selectedExpense.expense_desc" required/><br>
+			<label>Amount : </label><input type="text" ng-model="selectedExpense.amount" required/><br>
+			<input type="submit" value="Save Expense"/>&nbsp;
+			<input type="button" value="Clear" ng-click="selectedExpense={}"/>
 		</form>
 		<div>
 			<button ng-click="listAllExpenses()">Refresh</div>
