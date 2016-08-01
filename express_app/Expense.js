@@ -19,13 +19,17 @@ expenseSchema.pre('save',function(next){
 	next();
 });
 
-var Expense = mongoose.model('Expense', expenseSchema);
-
-Expense.findWithQuery = function(query){
-	this.find(query,function(err,data){
-		if(!err)
-			return data;
+expenseSchema.statics.findWithQuery = function(query){
+	return new Promise(function(resolve,reject){
+		this.find(query,function(err,data){
+			if(!err)
+				resolve(data);
+			else
+				reject(err);
+		});
 	});
 };
+
+var Expense = mongoose.model('Expense', expenseSchema);
 
 module.exports = Expense;
