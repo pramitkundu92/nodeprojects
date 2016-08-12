@@ -3,23 +3,33 @@
 	<head>
 	</head>
 	<body ng-app="expenseApp" ng-controller="AppCtrl">
-		<h3>Expense Add</h3>
+		<h3>Expense Add / Update / Delete</h3>
 		<form name="expenseForm" ng-submit="saveExpense()">
-			<label>Description : </label><input type="text" ng-model="selectedExpense.expense_desc" required/><br>
-			<label>Amount : </label><input type="text" ng-model="selectedExpense.amount" required/><br>
-			<input type="submit" value="Save Expense"/>&nbsp;
-			<input type="button" value="Clear" ng-click="selectedExpense={}"/>
+			<table>
+				<tr>
+					<td><label>Description : </label></td>
+					<td><input type="text" ng-model="selectedExpense.expense_desc" required/></td>
+				</tr>
+				<tr>
+					<td><label>Amount : </label></td>
+					<td><input type="text" ng-model="selectedExpense.amount" required/></td>
+				<tr>
+					<td><input type="submit" value="Save Expense"/></td>
+					<td><input type="button" value="Clear" ng-click="clear()"/></td>
+				</tr>
+				<tr>
+					<td><button ng-click="listAllExpenses()">Refresh</div></td>
+				</tr>
+			</table>
 		</form>
-		<div>
-			<button ng-click="listAllExpenses()">Refresh</div>
-		<div>
 		<div>
 			<hr>
 			<div ng-repeat="exp in expenseList">
 				Expense Description : {{exp.expense_desc}} <br>
 				Expense Amount : {{exp.amount}}
 				<br>
-				<button ng-click="editExpense($index)">Edit</button>
+				<button ng-click="editExpense($index)" ng-disabled="expenseEdited">Edit</button>&nbsp;
+				<button ng-click="deleteExpense($index)" ng-disabled="expenseEdited">Delete</button>
 				<hr>
 			</div>
 		</div>

@@ -5,22 +5,19 @@ var Schema = mongoose.Schema;
 
 /*connecting db with mongoose*/
 mongoose.connect('mongodb://127.0.0.1:27017/expenses');
-var seq_id = 3;
 
 var expenseSchema = new Schema({
-	expense_id: Number,
 	expense_desc: String,
 	amount: Number,
 	expense_date: Date
 });
 expenseSchema.pre('save',function(next){
-	this.expense_id = seq_id++;	
 	this.expense_date = new Date();
 	next();
 });
 
 expenseSchema.statics.findWithQuery = Promise.method(function(query){
-	return this.find({}, function(err,data){
+	return this.find(query, function(err,data){
 		if(!err)
 			return Promise.resolve(data);
 		else
@@ -31,6 +28,25 @@ expenseSchema.statics.findWithQuery = Promise.method(function(query){
 	},{
 		expense_desc: {$ne: null}
 	}]); 		
+});
+
+expenseSchema.statics.updateRecord = Promise.method(function(query,update){
+	return this.update(query,update,function(err){
+		if(!err)
+			return Promise.resolve('updated');
+		else
+			return Promise.reject(err);
+	});
+});
+
+expenseSchema.statics.deleteRecord = Promise.method(function(id){
+    var query = {_id: id};
+	return this.remove(query,function(err){
+		if(!err)
+			return Promise.resolve('deleted');
+		else
+			return Promise.reject(err);
+	});
 });
 
 var Expense = mongoose.model('Expense', expenseSchema);
