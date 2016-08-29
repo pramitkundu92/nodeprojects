@@ -1,7 +1,11 @@
 var app = angular.module('expenseApp',[]);
 var appUrl = '/webapp/express';
 
-app.controller('AppCtrl',['$scope','expenses',function($scope,expenses){
+app.config(['testServiceProvider',function(testServiceProvider){
+	testServiceProvider.setData('App loaded at ' + new Date().toString());
+}]);
+
+app.controller('AppCtrl',['$scope','expenses','testService',function($scope,expenses,testService){
 	$scope.selectedExpense = {};
 	$scope.expenseList = [];
 	$scope.expenseEdited = false;
@@ -44,7 +48,24 @@ app.controller('AppCtrl',['$scope','expenses',function($scope,expenses){
 			console.error(err);
 		});
 	};
+	$scope.testMethod = function(){
+		console.log(testService.getData());
+	};
 }]);
+
+app.provider('testService',function(){
+	var data = '';
+	this.setData = function(d){
+		data = d;	
+	};
+	this.$get = function(){
+		return {
+			getData: function(){
+				return data;
+			}
+		};
+	};
+});
 
 app.service('expenses',['$q','$http',function($q,$http){
 	this.saveExpense = function(expense){

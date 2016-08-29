@@ -77,5 +77,5 @@ router.delete('/delete/:id',function(req,res){
 });
 
 /*starting server*/
-server.listen(8080); 
-console.log('Server is running at port 8080');
+server.listen(3000,'0.0.0.0'); 
+console.log('Server is running at port 3000');

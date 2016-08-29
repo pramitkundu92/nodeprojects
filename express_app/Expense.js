@@ -6,8 +6,8 @@ var Schema = mongoose.Schema;
 /*connecting db with mongoose*/
 var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },  
 				replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };   
-var mongodbUri = 'mongodb://pramit:pramit7792@ds147965.mlab.com:47965/nodeprojectsdb'; 		
-//var mongodbUri = 'mongodb://127.0.0.1:27017/expenses'; 		
+//var mongodbUri = 'mongodb://pramit:pramit7792@ds147965.mlab.com:47965/nodeprojectsdb'; 		
+var mongodbUri = 'mongodb://127.0.0.1:27017/expenses'; 		
 mongoose.connect(mongodbUri,options);
 
 var expenseSchema = new Schema({
