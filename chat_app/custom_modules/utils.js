@@ -55,6 +55,7 @@ exports.deleteFromDB = function(collectionName, query){
 
 exports.findInDBUnique = function(collectionName, query){
 	return new Promise(function(resolve,reject){
+        console.log(query);
 		db[collectionName].findOne(query, function(err, data){
 			if(!err)
 				resolve(data);

@@ -2,7 +2,7 @@ var express = require('express');
 var bodyparser = require('body-parser');
 var mongojs = require('mongojs');
 var events = require('events');
-//var fs = require('fs');
+var fs = require('fs');
 var path = require('path');
 var multer = require('multer');
 var mime = require('mime-types');
@@ -10,6 +10,7 @@ var Promise = require('bluebird');
 var http = require('http');
 var socketio = require('socket.io');
 var request = require('request');
+var officegen = require('officegen');
 //importing custom modules
 var utils = require(__dirname + '/custom_modules/utils');
 
@@ -466,6 +467,32 @@ router2.get('/send/:id', function(req,res){
 	});
 	req.write(JSON.stringify(post_data)); //passing data to the POST method
 	req.end();
+});
+
+router.post('/createdocfile',function(req,res){
+    var fileName = __dirname + '/uploads/test_'+ new Date().getTime() + '.docx';
+    var data = req.body.text;
+    var out = fs.createWriteStream(fileName);
+    var docx = officegen ({
+        'type': 'docx',
+        'subject': 'test',
+        'keywords': 'test'
+    });
+    
+    var pObj = docx.createP();
+    pObj.addText (data, { color: '00ffff', back: '000088' });   
+    pObj.addLineBreak();
+    pObj.addText('hahahahhaha');
+    
+    pObj = docx.createP();
+    pObj.addText (data, { color: '000', back: 'ff0' });
+    
+    //other methods - putPageBreak, addImage, createTable
+    
+    out.on('close',function(){
+        res.send(fileName.split('/')[fileName.split('/').length-1]);   
+    });
+    docx.generate(out);   
 });
 
 server.listen(10000);

@@ -1,5 +1,5 @@
 {
-  "name": "ExpressJSApp",
+  "name": "expressjsapp",
   "version": "0.0.1",
   "description": "Express learning app",
   "main": "server.js",

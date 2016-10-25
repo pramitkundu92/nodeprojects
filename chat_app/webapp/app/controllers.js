@@ -118,14 +118,14 @@ meanApp.controller('HomeCtrl',['$scope','$http','$state','$stateParams','$window
 					$scope.errormsg = 'Error in file download';
 				}
 				else{	
-				var file = new Blob([ data ], {type : headers('Content-Type')});
-				var fileURL   = URL.createObjectURL(file);
-				var a         = document.createElement('a');
-				a.href        = fileURL; 
-				a.target      = '_blank';
-				a.download    = headers('FileName');
-				document.body.appendChild(a);
-				a.click();
+                    var file = new Blob([ data ], {type : headers('Content-Type')});
+                    var fileURL   = URL.createObjectURL(file);
+                    var a         = document.createElement('a');
+                    a.href        = fileURL; 
+                    a.target      = '_blank';
+                    a.download    = headers('FileName');
+                    document.body.appendChild(a);
+                    a.click();
 				}
 			}); 
 		}
@@ -152,4 +152,27 @@ meanApp.controller('HomeCtrl',['$scope','$http','$state','$stateParams','$window
 		search = '{"' + search + '"}';
 		console.log(JSON.parse(search));
 	};
+    
+    $scope.testFileDownload = function(){
+        $http.post(appUrl + '/createdocfile', {text:$scope.textWrittenByUser})
+        .success(function(data,status,headers,config){
+            $http.get($scope.downloadUrl + data, {responseType : 'arraybuffer'})
+						.success(function(data,status,headers,config){
+				if(data.byteLength == 35)
+				{
+					$scope.errormsg = 'Error in file download';
+				}
+				else{	
+                    var file = new Blob([ data ], {type : headers('Content-Type')});
+                    var fileURL   = URL.createObjectURL(file);
+                    var a         = document.createElement('a');
+                    a.href        = fileURL; 
+                    a.target      = '_blank';
+                    a.download    = headers('FileName');
+                    document.body.appendChild(a);
+                    a.click();
+				}
+			});        
+        })
+    };
 }]);
