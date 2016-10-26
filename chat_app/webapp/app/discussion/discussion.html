@@ -1,18 +1,18 @@
 <div>
     <h2>Blog goes here!</h2>
-    <div class="panel-body msg_container_base" chat-box message-list="msgList">
+    <div class="panel-body msg_container_base" chat-box message-list="msgList" style="padding:20px 10px">
         <div class="row msg-container" ng-repeat="m in msgList">
-            <div>
-                <span>
-                    <span>{{m.user}} </span>
+            <ul>
+                <li>
+                    <span>{{m.username}} </span>
                     <span>- {{m.msg}}</span>
-                </span>
-            </div>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="panel-footer">
         <div class="input-group">
-            <textarea required id="msgbox" rows="5" cols="50" ng-model="msg" class="form-control" ng-keydown="keydownEvent($event)" 
+            <textarea required id="msgbox" rows="5" cols="50" ng-model="msg" class="form-control" ng-keydown="keydownEvent($event)"
             ng-keypress = "sendMessage($event)" placeholder="Write something..."></textarea>
             <button class="btn btn-primary" ng-click="sendMessage($event)">Send</button>
             <button class="btn btn-info" ng-click="msg=''">Clear</button>

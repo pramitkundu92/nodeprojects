@@ -57,11 +57,11 @@ router.post('/adduser',function(req,res){
 	user.name = req.body.name;
 	user.password = req.body.password;
 	user.userid = req.body.userid;
-	
+
 	utils.insertInDB(userDBName, user)
 	.then(function(result){ return utils.findInDB(userDBName, {}); })
 	.then(function(result){	res.json(result); });
-});	
+});
 
 router.delete('/deleteuser/:id',function(req,res){
 	var id = req.params.id;
@@ -75,12 +75,12 @@ router.post('/login',function(req,res){
 	utils.findInDBUnique(userDBName, {userid : id})
 	.then(function(result){
 		if(result!=null)
-		{	
+		{
 			if(result.password == req.body.password)
 			{
 				res.json({authenticated : true});
-			}	
-			else	
+			}
+			else
 				res.json({authenticated : false});
 		}
 		else
@@ -115,7 +115,7 @@ var timer = '';
 var timers = [];
 var room = {};
 var blogChats = [];
-io.on('connection',function(socket){	
+io.on('connection',function(socket){
 	console.log('chat server connected');
 	addConnection(socket);
 	socket.on('load chats', function(data){
@@ -153,14 +153,14 @@ io.on('connection',function(socket){
 			if(c.party2 == socket.handshake.query.to && c.party1 == socket.handshake.query.from)
 			{
 				io.to(c.socketId).emit('start typing2');
-			}	
+			}
 		});
 		timer = setTimeout(function(){
 			connectionMap.forEach(function(c){ //search for the corresponding counter chat
 				if(c.party2 == socket.handshake.query.to && c.party1 == socket.handshake.query.from)
 				{
 					io.to(c.socketId).emit('stop typing2');
-				}	
+				}
 			});
 		}, 2500);
 		timers.push({userid: socket.handshake.query.from, timer : timer});
@@ -170,7 +170,7 @@ io.on('connection',function(socket){
 			if(c.party2 == socket.handshake.query.to && c.party1 == socket.handshake.query.from)
 			{
 				io.to(c.socketId).emit('stop typing2');
-			}	
+			}
 		});
 	});
 	console.log('Number of connections - ' + connectionMap.length);
@@ -185,7 +185,7 @@ io.on('connection',function(socket){
         displayRoom();
     });
     socket.on('sendMsg',function(data){
-        var obj = {socketId: socket.id, msg: data, user: room[socket.id]};
+        var obj = {socketId: socket.id, msg: data.text, userid: room[socket.id], username: data.username};
         blogChats.push(obj);
         io.emit('loadMessages',obj);
     });
@@ -222,7 +222,7 @@ function addConnection(socket)
 	});
 	if(flag)
 	{
-		var conn = {}; //register a new connection 	
+		var conn = {}; //register a new connection
 		conn.party1 = socket.handshake.query.to;
 		conn.party2 = socket.handshake.query.from;
 		conn.socketId = socket.id;
@@ -263,7 +263,7 @@ router.get('/downloadmsg/:id',function(req,res){
 		res.setHeader('Content-Type','text/plain');
 		res.setHeader('FileName', id + '.txt');
 		res.send(content);
-		return utils.writeFile(filename,content);		
+		return utils.writeFile(filename,content);
 	})
 	.then(function(result){	});
 });
@@ -289,14 +289,14 @@ router.get('/downloadfile/:filename',function(req,res){
 				fs.read(fd, buff, 0, buff.length, 0, function(err,bytes){
 					res.setHeader('Content-disposition', 'attachment; filename=' + fullname);
 					res.setHeader('Content-Type',mime.lookup(fullname));
-					res.setHeader('FileName', req.params.filename);	
+					res.setHeader('FileName', req.params.filename);
 					res.send(buff);
 				});
-			});			
+			});
 		}
 	}); */
 	//promise chaining based implementation
-	utils.openFile(fullname, mode) 
+	utils.openFile(fullname, mode)
 	.then(function(result){	fd = result; return utils.getFileStats(fullname); })
 	.then(function(result){ var buff = new Buffer(result['size']); return utils.readFile(fd, buff); })
 	.then(function(result){
@@ -314,13 +314,13 @@ router.get('/getmessagesummary',function(req,res){ //dependent query
 	var str = '';
 	var message = '';
 	var count = 0;
-	utils.findInDB(userDBName,{}) 										//find all users with query as  blank  object 
+	utils.findInDB(userDBName,{}) 										//find all users with query as  blank  object
 	.then(function(result){
 		str = '----------Message summary on ' + new Date() + '----------\r\n';
 		result.forEach(function(user){ 									//traverse the users array received from promise
 			utils.findInDB(messageDBName, {from : user.userid}) 		//search for a single user's messages
 			.then(function(result2){
-				str += user.name + '\r\n';								// formatted output in str String variable	
+				str += user.name + '\r\n';								// formatted output in str String variable
 				result2.forEach(function(msg){  						//traverse the message array received from promise
 					message = '';
 					message += 'To : ' + msg.to;
@@ -329,13 +329,13 @@ router.get('/getmessagesummary',function(req,res){ //dependent query
 					message += ' At : ' + msg.time;
 					str += message + '\r\n';
 				});
-				str += '-----------------------------------------------------------------\r\n'; // formatted output in str String variable	
+				str += '-----------------------------------------------------------------\r\n'; // formatted output in str String variable
 				count++;  												//increase count of users already considered
 				if(count == result.length) 								//if all users are considered return response
 				{
 					res.setHeader('Content-Type', 'text/plain'); 		//adding this so that the file can be downloaded as .txt in front end
 					res.send(str);
-				}	
+				}
 			});
 		});
 	})
@@ -355,22 +355,22 @@ router.get('/runcomplexquery', function(req,res){
 			json.data = [];
 			result.forEach(function(user){
 				utils.findInDB('useractivity', {userid : user.userid})
-				.then(function(result2){	
+				.then(function(result2){
 					if(result2.length > 0)
-					{		
+					{
 						usr = {};
-						for(var i=0;i<result2.length;i++)	
+						for(var i=0;i<result2.length;i++)
 						{
 							var useract = result2[i];
-							usr.activities = [];							
+							usr.activities = [];
 							utils.findInDB('activities', {actid : useract.actId})
-							.then(function(act){								
+							.then(function(act){
 								usr.userid = user.userid;
 								usr.activityCount = result2.length;
-								usr.activities.push(act[0].name);	
-								console.log('received data for ' + usr.activities);								
+								usr.activities.push(act[0].name);
+								console.log('received data for ' + usr.activities);
 								if(usr.activities.length == usr.activityCount)
-								{									
+								{
 									count++;
 									json.data.push(usr);
 									usr = {};
@@ -378,10 +378,10 @@ router.get('/runcomplexquery', function(req,res){
 									if(count >= result.length)
 									{
 										res.json(json);
-									}									
-								}	
+									}
+								}
 							});
-							console.log('call made by ' + user.userid);	
+							console.log('call made by ' + user.userid);
 						}
 					}
 					else
@@ -392,8 +392,8 @@ router.get('/runcomplexquery', function(req,res){
 						{
 							res.json(json);
 						}
-					}					
-				});	
+					}
+				});
 			});
 		}
 		else
@@ -405,7 +405,7 @@ router2.get('/getdata/:id',function(req,res){ //router2 corresponds to a diff RE
 	var id = req.params.id;
 	var obj = {};
 	var url = 'http://localhost:10000/webapp/node/ui/runcomplexquery';
-	
+
 	//calling a rest service on same server using REQUEST MODULE
 	/* request(url , function(error, response, body){
 		var bodyData = JSON.parse(body);
@@ -418,11 +418,11 @@ router2.get('/getdata/:id',function(req,res){ //router2 corresponds to a diff RE
 					obj.activities = d.activities;
 					res.json(obj);
 				});
-			}	
+			}
 		});
 	}); */
-	
-	// calling a rest service on same server with HTTP 
+
+	// calling a rest service on same server with HTTP
 	var options = {
 		host : 'localhost', //hostname
 		port : 10000,
@@ -441,7 +441,7 @@ router2.get('/getdata/:id',function(req,res){ //router2 corresponds to a diff RE
 						obj.activities = d.activities;
 						res.json(obj);
 					});
-				}	
+				}
 			});
 		});
 		response.on('end', function(){
@@ -461,7 +461,7 @@ router.post('/send', function(req,res){
 	};
 	var req = http.request(options, function(response){
 		response.on('data', function(body){
-			var obj = JSON.parse(body);			
+			var obj = JSON.parse(body);
 			var count = obj.activities.length;
 			obj.count = count;
 			res.json(obj);
@@ -500,21 +500,21 @@ router.post('/createdocfile',function(req,res){
         'subject': 'test',
         'keywords': 'test'
     });
-    
+
     var pObj = docx.createP();
-    pObj.addText (data, { color: '00ffff', back: '000088' });   
+    pObj.addText (data, { color: '00ffff', back: '000088' });
     pObj.addLineBreak();
     pObj.addText('hahahahhaha');
-    
+
     pObj = docx.createP();
     pObj.addText (data, { color: '000', back: 'ff0' });
-    
+
     //other methods - putPageBreak, addImage, createTable
-    
+
     out.on('close',function(){
-        res.send(fileName.split('/')[fileName.split('/').length-1]);   
+        res.send(fileName.split('/')[fileName.split('/').length-1]);
     });
-    docx.generate(out);   
+    docx.generate(out);
 });
 
 server.listen(10000);
