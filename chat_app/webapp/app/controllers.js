@@ -175,4 +175,8 @@ meanApp.controller('HomeCtrl',['$scope','$http','$state','$stateParams','$window
 			});        
         })
     };
+    
+    $scope.openDiscussion = function(){
+        $state.go('discussion',{userid : $scope.loggedInUser});
+    };
 }]);

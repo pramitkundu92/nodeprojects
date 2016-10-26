@@ -21,5 +21,13 @@ var appStates = [
 		templateUrl : appUrl + '/app/message/message.html',
 		params : {user : null, from: null},
 		abstract : false
+	},
+	{
+		name : 'discussion',
+		url : '/{userid}/discussion',
+		controller : 'DiscussionCtrl',
+		templateUrl : appUrl + '/app/discussion/discussion.html',
+		params : {userid : null},
+		abstract : false
 	}
 ];

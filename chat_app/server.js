@@ -113,6 +113,8 @@ router.get('/getusername/:id',function(req,res){
 var connectionMap = []; //map all the sockets connected
 var timer = '';
 var timers = [];
+var room = {};
+var blogChats = [];
 io.on('connection',function(socket){	
 	console.log('chat server connected');
 	addConnection(socket);
@@ -172,6 +174,26 @@ io.on('connection',function(socket){
 		});
 	});
 	console.log('Number of connections - ' + connectionMap.length);
+    //code for discussion room
+    var displayRoom = function(){
+        console.log('current room - ');
+        console.log(room);
+    };
+    socket.on('joined',function(user){
+        room[socket.id] = user;
+        socket.emit('initLoad',blogChats);
+        displayRoom();
+    });
+    socket.on('sendMsg',function(data){
+        var obj = {socketId: socket.id, msg: data, user: room[socket.id]};
+        blogChats.push(obj);
+        io.emit('loadMessages',obj);
+    });
+    socket.on('disconnect',function(){
+        delete room[socket.id];
+        displayRoom();
+    });
+    //code for discussion room
 });
 
 function clearTimeouts(userid){
