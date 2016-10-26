@@ -187,7 +187,9 @@ io.on('connection',function(socket){
     socket.on('sendMsg',function(data){
         var obj = {socketId: socket.id, msg: data.text, userid: room[socket.id], username: data.username};
         blogChats.push(obj);
-        io.emit('loadMessages',obj);
+        for(key in room){
+          io.to(key).emit('loadMessages',obj);
+        }
     });
     socket.on('disconnect',function(){
         delete room[socket.id];

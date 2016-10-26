@@ -18,7 +18,6 @@ meanApp.controller('DiscussionCtrl',['$scope','$http','$stateParams','$timeout',
     socket.on('loadMessages',function(data){
         $scope.$apply(function(){
             $scope.msgList.push(data);
-            console.log($scope.msgList);
         });
     });
     $scope.sendMessage = function(event){
@@ -30,6 +29,10 @@ meanApp.controller('DiscussionCtrl',['$scope','$http','$stateParams','$timeout',
                 $scope.msg = '';
             }
 		    }
+    };
+    $scope.closeForum = function(){
+      socket.disconnect();
+      $state.go('home',{userid : $scope.user.userid});
     };
     $scope.$on('$destroy',function(){
         socket.emit('disconnect');

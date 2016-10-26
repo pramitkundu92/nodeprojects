@@ -1,6 +1,6 @@
 meanApp.controller('MainCtrl',['$scope','$http','$state','$stateParams',function($scope,$http,$state,$stateParams){
 	$scope.heading = 'NODER App';
-	
+
 	$scope.gotoState = function(stateName,stateParams){
 		if(!stateParams)
 			$state.go(stateName);
@@ -11,17 +11,19 @@ meanApp.controller('MainCtrl',['$scope','$http','$state','$stateParams',function
 
 meanApp.controller('HomeCtrl',['$scope','$http','$state','$stateParams','$window',function($scope,$http,$state,$stateParams,$window){
 	$scope.userList = [];
-	
+
 	$scope.newUser = '';
 	$scope.loggedInUser = $stateParams.userid;
-	getUser($stateParams.userid);
-	
+	setTimeout(function(){
+		getUser($stateParams.userid);
+	},0);
+
 	function getUser(id){
 		$http.get(appUrl + '/getusername/' + id).success(function(response){
-			$scope.greeting = 'Welcome, ' +  response[0].name;
+			$scope.greeting = 'Welcome, ' +  response[0].password;
 		});
 	};
-	
+
 	var refresh = function(){
 		$http.get(appUrl + '/getallusers').success(function(response){
 			var arr = [];
@@ -29,12 +31,12 @@ meanApp.controller('HomeCtrl',['$scope','$http','$state','$stateParams','$window
 				if(usr.userid !== $scope.loggedInUser)
 					arr.push(usr);
 			});
-			$scope.userList = angular.copy(arr);	
+			$scope.userList = angular.copy(arr);
 		});
 	};
-	
+
 	refresh();
-	
+
 	$scope.addUser = function(){
 		$http.post(appUrl + '/adduser', $scope.newUser).success(function(response){
 			var arr = [];
@@ -46,7 +48,7 @@ meanApp.controller('HomeCtrl',['$scope','$http','$state','$stateParams','$window
 			$scope.newUser = '';
 		});
 	};
-	
+
 	$scope.deleteUser = function(userid){
 		$http.delete(appUrl + '/deleteuser/' + userid).success(function(response){
 			var arr = [];
@@ -57,36 +59,36 @@ meanApp.controller('HomeCtrl',['$scope','$http','$state','$stateParams','$window
 			$scope.userList = angular.copy(arr);
 		});
 	};
-	
+
 	$scope.openChatWindow = function(){
 		$http.get(appUrl + '/online/' + $scope.loggedInUser).success(function(response){
 			$scope.gotoState('message',{});
-		});		
+		});
 	};
-	
+
 	$scope.gotoState = function(stateName,stateParams){
 		if(!stateParams)
 			$state.go(stateName);
 		else
 			$state.go(stateName,{user : stateParams, from : $scope.loggedInUser});
 	};
-	
+
 	$scope.download = function(){
 		$http.get(appUrl + '/downloadmsg/' + $scope.loggedInUser).success(function(data,status,headers,config){
 			var file = new Blob([ data ], {type : headers('Content-Type')});
             var fileURL   = URL.createObjectURL(file);
             var a         = document.createElement('a');
-            a.href        = fileURL; 
+            a.href        = fileURL;
             a.target      = '_blank';
             a.download    = headers('FileName')
             document.body.appendChild(a);
             a.click();
 		});
 	};
-	
+
 	$scope.uploadObject = {};
 	$scope.uploadUrl = appUrl + '/upload';
-	
+
 	$scope.upload = function(){
 		if($scope.uploadObject.file!=undefined)
 		{
@@ -100,7 +102,7 @@ meanApp.controller('HomeCtrl',['$scope','$http','$state','$stateParams','$window
 		});
 		}
 	};
-	
+
 	$scope.errormsg = '';
 	$scope.fileName = '';
 	$scope.downloadUrl = appUrl + '/downloadfile/';
@@ -117,24 +119,24 @@ meanApp.controller('HomeCtrl',['$scope','$http','$state','$stateParams','$window
 				{
 					$scope.errormsg = 'Error in file download';
 				}
-				else{	
+				else{
                     var file = new Blob([ data ], {type : headers('Content-Type')});
                     var fileURL   = URL.createObjectURL(file);
                     var a         = document.createElement('a');
-                    a.href        = fileURL; 
+                    a.href        = fileURL;
                     a.target      = '_blank';
                     a.download    = headers('FileName');
                     document.body.appendChild(a);
                     a.click();
 				}
-			}); 
+			});
 		}
 		else
 			$scope.errormsg = 'Please enter a filename';
 	};
-	
+
 	$scope.getAllMessages = function(){
-		$http.get(appUrl + '/getmessagesummary').success(function(data,status,headers,config){ 
+		$http.get(appUrl + '/getmessagesummary').success(function(data,status,headers,config){
 			var file = new Blob([ data ], {type : headers('Content-Type')});
 			var fileUrl = URL.createObjectURL(file);
 			var a = document.createElement('a');
@@ -145,14 +147,14 @@ meanApp.controller('HomeCtrl',['$scope','$http','$state','$stateParams','$window
 			a.click();
 		});
 	};
-	
+
 	$scope.decodeUrl = function(){
 		var search = window.location.href.split('?')[1] == undefined ? '' : window.location.href.split('?')[1];
 		search = search.replace(/&/g, '","').replace(/=/g, '":"');
 		search = '{"' + search + '"}';
 		console.log(JSON.parse(search));
 	};
-    
+
     $scope.testFileDownload = function(){
         $http.post(appUrl + '/createdocfile', {text:$scope.textWrittenByUser})
         .success(function(data,status,headers,config){
@@ -162,20 +164,20 @@ meanApp.controller('HomeCtrl',['$scope','$http','$state','$stateParams','$window
 				{
 					$scope.errormsg = 'Error in file download';
 				}
-				else{	
+				else{
                     var file = new Blob([ data ], {type : headers('Content-Type')});
                     var fileURL   = URL.createObjectURL(file);
                     var a         = document.createElement('a');
-                    a.href        = fileURL; 
+                    a.href        = fileURL;
                     a.target      = '_blank';
                     a.download    = headers('FileName');
                     document.body.appendChild(a);
                     a.click();
 				}
-			});        
+			});
         })
     };
-    
+
     $scope.openDiscussion = function(){
         $state.go('discussion',{userid : $scope.loggedInUser});
     };

@@ -1,13 +1,15 @@
 <div>
     <h2>Blog goes here!</h2>
-    <div class="panel-body msg_container_base" chat-box message-list="msgList" style="padding:20px 10px">
+    <div id="chatbox_container" class="panel-body msg_container_base" chat-box message-list="msgList" style="padding:20px 10px;">
+        <i class="glyphicon glyphicon-remove close-button" ng-click="closeForum()"></i>
         <div class="row msg-container" ng-repeat="m in msgList">
-            <ul>
-                <li>
-                    <span>{{m.username}} </span>
-                    <span>- {{m.msg}}</span>
-                </li>
-            </ul>
+            <div style="margin-left:15px">
+                <i class="glyphicon glyphicon-user"></i>
+                &nbsp;&nbsp;
+                <span>{{m.username}}</span>
+                &nbsp;-&nbsp;
+                <span>{{m.msg}}</span>
+            </div>
         </div>
     </div>
     <div class="panel-footer">
@@ -15,6 +17,7 @@
             <textarea required id="msgbox" rows="5" cols="50" ng-model="msg" class="form-control" ng-keydown="keydownEvent($event)"
             ng-keypress = "sendMessage($event)" placeholder="Write something..."></textarea>
             <button class="btn btn-primary" ng-click="sendMessage($event)">Send</button>
+            &nbsp;&nbsp;
             <button class="btn btn-info" ng-click="msg=''">Clear</button>
         </div>
     </div>
