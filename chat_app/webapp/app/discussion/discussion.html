@@ -5,7 +5,6 @@
         <div class="row msg-container" ng-repeat="m in msgList">
             <div style="margin-left:15px">
                 <i class="glyphicon glyphicon-user"></i>
-                &nbsp;&nbsp;
                 <span>{{m.username}}</span>
                 &nbsp;-&nbsp;
                 <span>{{m.msg}}</span>
@@ -13,11 +12,12 @@
         </div>
     </div>
     <div class="panel-footer">
-        <div class="input-group">
+        <div>
             <textarea required id="msgbox" rows="5" cols="50" ng-model="msg" class="form-control" ng-keydown="keydownEvent($event)"
             ng-keypress = "sendMessage($event)" placeholder="Write something..."></textarea>
+            <br/>
             <button class="btn btn-primary" ng-click="sendMessage($event)">Send</button>
-            &nbsp;&nbsp;
+            &nbsp;
             <button class="btn btn-info" ng-click="msg=''">Clear</button>
         </div>
     </div>

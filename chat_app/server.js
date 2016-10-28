@@ -185,7 +185,14 @@ io.on('connection',function(socket){
         displayRoom();
     });
     socket.on('sendMsg',function(data){
-        var obj = {socketId: socket.id, msg: data.text, userid: room[socket.id], username: data.username};
+        var obj = {
+                   socketId: socket.id,
+                   msg: data.text,
+                   userid: room[socket.id],
+                   username: data.username,
+                   video: data.video
+                 };
+        console.log(data.video);
         blogChats.push(obj);
         for(key in room){
           io.to(key).emit('loadMessages',obj);

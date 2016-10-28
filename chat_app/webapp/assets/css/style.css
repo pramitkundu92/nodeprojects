@@ -1,5 +1,7 @@
 @import url("http://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css");
-/* @import url("../../vendor/bootstrap-glyphicons.css"); */
+body {
+	background-color: #c3c3c3;
+}
 .msg_receive
 {
 	float : left;
